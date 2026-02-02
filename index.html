@@ -14,7 +14,6 @@
         .tabs button { flex: 1; padding: 10px 5px; border: none; border-radius: 8px; background: #e4e6eb; font-weight: bold; cursor: pointer; font-size: 0.85em; }
         .tabs button.active { background: #1877f2; color: white; }
         .list-item { display: flex; justify-content: space-between; padding: 12px 8px; border-bottom: 1px solid #eee; cursor: pointer; align-items: center; }
-        /* 今日標籤樣式 */
         .today-label { color: #f02849; font-weight: bold; margin-left: 5px; font-size: 0.9em; }
         .all-view-item { display: flex; gap: 10px; padding: 10px 8px; border-bottom: 1px dotted #ccc; font-size: 0.95em; }
         .back-btn { color: #1877f2; cursor: pointer; margin-bottom: 15px; display: inline-block; font-weight: bold; background: #f0f2f5; padding: 5px 12px; border-radius: 20px; }
@@ -28,9 +27,7 @@
     <div class="card">
         <h2 id="mainTitle">😎 阿湯好帥氣好聰明</h2>
         <div id="todayDate" class="today-box"></div>
-        
         <img src="IMG_3154.jpeg" class="cover-img" id="coverImage">
-
         <div id="tabBar" class="tabs">
             <button id="tabD" class="active" onclick="renderD()">按日期</button>
             <button id="tabB" onclick="renderB()">按品牌</button>
@@ -39,10 +36,9 @@
         <div id="content"></div>
     </div>
     <script>
-        // 設定今日日期資訊
         const now = new Date();
         const days = ['日', '一', '二', '三', '四', '五', '六'];
-        const currentMD = `${now.getMonth() + 1}/${now.getDate()}`; // 取得格式如 "2/2"
+        const currentMD = `${now.getMonth() + 1}/${now.getDate()}`;
         document.getElementById('todayDate').innerText = `今天是 ${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 (週${days[now.getDay()]})`;
 
         const data = [
@@ -67,7 +63,6 @@
             clearActive(); document.getElementById('tabD').className='active';
             const dates = [...new Set(data.map(i=>i.d))];
             ct.innerHTML = dates.map(d=> {
-                // 如果是今天，就加紅色的 (今日)
                 const label = (d === currentMD) ? '<span class="today-label">(今日)</span>' : '';
                 return `<div class="list-item" onclick="dtlD('${d}')"><span>${d}${label}</span><span>❯</span></div>`;
             }).join('');
@@ -75,7 +70,7 @@
 
         function dtlD(d) {
             const label = (d === currentMD) ? ' (今日)' : '';
-            title.innerText = "🗓️ " + d + label + " 直播日程";
+            title.innerText = "🗓️ " + d + label;
             tabBar.style.display = "none";
             coverImg.style.display = "none";
             todayBox.style.display = "none";
@@ -93,7 +88,8 @@
             tabBar.style.display = "none";
             coverImg.style.display = "none";
             todayBox.style.display = "none";
-            ct.innerHTML = `<div class="back-btn" onclick="renderB()">⇠ 返回列表</div>` + data.filter(i=>i.d===b).map(i=> {
+            // 修正處：這裡加入了 ${i.t} 顯示時間
+            ct.innerHTML = `<div class="back-btn" onclick="renderB()">⇠ 返回列表</div>` + data.filter(i=>i.b===b).map(i=> {
                 const label = (i.d === currentMD) ? '<span class="today-label">(今日)</span>' : '';
                 return `<div class="list-item"><span>${i.d}${label}</span><span class="time-tag">${i.t}</span></div>`;
             }).join('');
