@@ -17,6 +17,8 @@
         .time-tag { color: #65676b; font-size: 0.85em; width: 45px; }
         .date-tag { color: #1877f2; font-weight: bold; width: 40px; }
         .brand-name { font-weight: 600; color: #050505; flex: 1; }
+        /* 當日期重複時，隱藏文字但保留空間 */
+        .date-hidden { visibility: hidden; }
     </style>
 </head>
 <body>
@@ -55,7 +57,16 @@
         }
         function renderAll() {
             clearActive(); document.getElementById('tabA').className='active';
-            ct.innerHTML = data.map(i=>`<div class="all-view-item"><span class="date-tag">${i.d}</span><span class="time-tag">${i.t}</span><span class="brand-name">${i.b}</span></div>`).join('');
+            let lastDate = "";
+            ct.innerHTML = data.map(i => {
+                const showDate = i.d !== lastDate;
+                lastDate = i.d;
+                return `<div class="all-view-item">
+                    <span class="date-tag ${showDate ? '' : 'date-hidden'}">${i.d}</span>
+                    <span class="time-tag">${i.t}</span>
+                    <span class="brand-name">${i.b}</span>
+                </div>`;
+            }).join('');
         }
         renderD();
     </script>
