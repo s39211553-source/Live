@@ -7,12 +7,15 @@
     <style>
         body { font-family: -apple-system, sans-serif; background: #f0f2f5; margin: 0; padding: 15px; }
         .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 450px; margin: auto; }
-        h2 { text-align: center; color: #1877f2; margin-top: 0; font-size: 1.4em; }
-        .cover-img { width: 100%; border-radius: 12px; margin: 10px 0 20px 0; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1877f2; margin-top: 0; margin-bottom: 5px; font-size: 1.4em; }
+        .today-box { text-align: center; color: #65676b; font-size: 0.9em; margin-bottom: 15px; font-weight: 500; }
+        .cover-img { width: 100%; border-radius: 12px; margin: 0 0 20px 0; display: block; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
         .tabs button { flex: 1; padding: 10px 5px; border: none; border-radius: 8px; background: #e4e6eb; font-weight: bold; cursor: pointer; font-size: 0.85em; }
         .tabs button.active { background: #1877f2; color: white; }
         .list-item { display: flex; justify-content: space-between; padding: 12px 8px; border-bottom: 1px solid #eee; cursor: pointer; align-items: center; }
+        /* 今日標籤樣式 */
+        .today-label { color: #f02849; font-weight: bold; margin-left: 5px; font-size: 0.9em; }
         .all-view-item { display: flex; gap: 10px; padding: 10px 8px; border-bottom: 1px dotted #ccc; font-size: 0.95em; }
         .back-btn { color: #1877f2; cursor: pointer; margin-bottom: 15px; display: inline-block; font-weight: bold; background: #f0f2f5; padding: 5px 12px; border-radius: 20px; }
         .time-tag { color: #65676b; font-size: 0.85em; width: 45px; }
@@ -24,6 +27,7 @@
 <body>
     <div class="card">
         <h2 id="mainTitle">😎 阿湯好帥氣好聰明</h2>
+        <div id="todayDate" class="today-box"></div>
         
         <img src="IMG_3154.jpeg" class="cover-img" id="coverImage">
 
@@ -35,50 +39,75 @@
         <div id="content"></div>
     </div>
     <script>
+        // 設定今日日期資訊
+        const now = new Date();
+        const days = ['日', '一', '二', '三', '四', '五', '六'];
+        const currentMD = `${now.getMonth() + 1}/${now.getDate()}`; // 取得格式如 "2/2"
+        document.getElementById('todayDate').innerText = `今天是 ${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 (週${days[now.getDay()]})`;
+
         const data = [
             {d:"2/1",t:"23:30",b:"美度"},{d:"2/2",t:"12:00",b:"大漢"},{d:"2/2",t:"13:00",b:"巴黎卡詩"},{d:"2/2",t:"18:00",b:"Dyson"},{d:"2/2",t:"20:00",b:"裸"},{d:"2/2",t:"21:30",b:"璞珥森"},{d:"2/2",t:"23:00",b:"美度"},{d:"2/3",t:"14:00",b:"Dyson"},{d:"2/3",t:"21:00",b:"HH"},{d:"2/4",t:"21:00",b:"新普利"},{d:"2/4",t:"22:00",b:"果果"},{d:"2/4",t:"23:00",b:"美度"},{d:"2/5",t:"20:00",b:"Skin Care Ism"},{d:"2/7",t:"21:00",b:"HH"},{d:"2/8",t:"22:00",b:"美度"},{d:"2/9",t:"10:00",b:"Dyson"},{d:"2/9",t:"14:00",b:"開會"},{d:"2/9",t:"19:00",b:"媚比琳"},{d:"2/10",t:"19:00",b:"媚比琳"},{d:"2/12",t:"19:00",b:"媚比琳"},{d:"2/14",t:"12:00",b:"HH"},{d:"2/17",t:"21:00",b:"果果"},{d:"2/18",t:"12:00",b:"西西的店"},{d:"2/18",t:"18:00",b:"Dyson"},{d:"2/18",t:"20:00",b:"媚比琳"},{d:"2/18",t:"22:30",b:"璞珥森"},{d:"2/20",t:"22:00",b:"果果"},{d:"2/21",t:"20:00",b:"Dyson"},{d:"2/22",t:"20:00",b:"24hrs"},{d:"2/22",t:"21:00",b:"美度"},{d:"2/23",t:"21:00",b:"美度"},{d:"2/24",t:"19:00",b:"巴黎卡詩"},{d:"2/24",t:"21:00",b:"易而善"},{d:"2/24",t:"23:30",b:"美度"},{d:"2/25",t:"12:00",b:"西西的店"},{d:"2/25",t:"18:00",b:"汪喵星球"},{d:"2/25",t:"20:00",b:"Dyson"},{d:"2/25",t:"22:00",b:"超越汪喵"},{d:"2/26",t:"21:00",b:"逸盛科技"},{d:"2/27",t:"12:00",b:"巴黎卡詩"},{d:"2/28",t:"12:00",b:"HH"},{d:"2/28",t:"20:00",b:"果果"},{d:"2/28",t:"23:30",b:"美度"}
         ];
+
         const ct = document.getElementById('content');
         const title = document.getElementById('mainTitle');
         const tabBar = document.getElementById('tabBar');
         const coverImg = document.getElementById('coverImage');
+        const todayBox = document.getElementById('todayDate');
 
         function clearActive() {
             ['tabD','tabB','tabA'].forEach(id=>document.getElementById(id).className='');
             title.innerText = "😎 阿湯好帥氣好聰明";
             tabBar.style.display = "flex";
             coverImg.style.display = "block";
+            todayBox.style.display = "block";
         }
+
         function renderD() {
             clearActive(); document.getElementById('tabD').className='active';
             const dates = [...new Set(data.map(i=>i.d))];
-            ct.innerHTML = dates.map(d=>`<div class="list-item" onclick="dtlD('${d}')"><span>${d}</span><span>❯</span></div>`).join('');
+            ct.innerHTML = dates.map(d=> {
+                // 如果是今天，就加紅色的 (今日)
+                const label = (d === currentMD) ? '<span class="today-label">(今日)</span>' : '';
+                return `<div class="list-item" onclick="dtlD('${d}')"><span>${d}${label}</span><span>❯</span></div>`;
+            }).join('');
         }
+
         function dtlD(d) {
-            title.innerText = "🗓️ " + d + " 直播日程";
+            const label = (d === currentMD) ? ' (今日)' : '';
+            title.innerText = "🗓️ " + d + label + " 直播日程";
             tabBar.style.display = "none";
             coverImg.style.display = "none";
+            todayBox.style.display = "none";
             ct.innerHTML = `<div class="back-btn" onclick="renderD()">⇠ 返回列表</div>` + data.filter(i=>i.d===d).map(i=>`<div class="list-item"><span class="time-tag">${i.t}</span><span class="brand-name">${i.b}</span></div>`).join('');
         }
+
         function renderB() {
             clearActive(); document.getElementById('tabB').className='active';
             const brands = [...new Set(data.map(i=>i.b))].sort();
             ct.innerHTML = brands.map(b=>`<div class="list-item" onclick="dtlB('${b}')"><span>${b}</span><span>❯</span></div>`).join('');
         }
+
         function dtlB(b) {
             title.innerText = "🏷️ " + b;
             tabBar.style.display = "none";
             coverImg.style.display = "none";
-            ct.innerHTML = `<div class="back-btn" onclick="renderB()">⇠ 返回列表</div>` + data.filter(i=>i.b===b).map(i=>`<div class="list-item"><span>${i.d}</span><span class="time-tag">${i.t}</span></div>`).join('');
+            todayBox.style.display = "none";
+            ct.innerHTML = `<div class="back-btn" onclick="renderB()">⇠ 返回列表</div>` + data.filter(i=>i.d===b).map(i=> {
+                const label = (i.d === currentMD) ? '<span class="today-label">(今日)</span>' : '';
+                return `<div class="list-item"><span>${i.d}${label}</span><span class="time-tag">${i.t}</span></div>`;
+            }).join('');
         }
+
         function renderAll() {
             clearActive(); document.getElementById('tabA').className='active';
             let lastDate = "";
             ct.innerHTML = data.map(i => {
                 const showDate = i.d !== lastDate;
                 lastDate = i.d;
+                const label = (i.d === currentMD) ? '<span class="today-label">(今日)</span>' : '';
                 return `<div class="all-view-item">
-                    <span class="date-tag ${showDate ? '' : 'date-hidden'}">${i.d}</span>
+                    <span class="date-tag ${showDate ? '' : 'date-hidden'}">${i.d}${showDate ? label : ''}</span>
                     <span class="time-tag">${i.t}</span>
                     <span class="brand-name">${i.b}</span>
                 </div>`;
@@ -88,6 +117,3 @@
     </script>
 </body>
 </html>
-
-         
-
